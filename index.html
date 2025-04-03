@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encrypted Chat App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<html>
+<body>
+    <div class="user-selector">
+        <h2>Login as:</h2>
+        <input type="text" id="username" placeholder="Enter your username">
+        <button onclick="setUser()">Login/Create User</button>
+    </div>
+
+    <h1 id="user-title">Chat</h1>
+    <button onclick="generateKeys()" class="hidden" id="generate-btn">Generate New Keys</button>
+    <div id="key-display" class="hidden">
+        <h3>Your Public Key:</h3>
+        <textarea id="public-key" readonly></textarea>
+    </div>
+    
+    <h3>Recipient's Public Key:</h3>
+    <textarea id="recipient-key"></textarea>
+    
+    <h3>Send Message:</h3>
+    <input type="text" id="message-input" placeholder="Type message..." class="hidden" disabled>
+    <button onclick="sendMessage()" class="hidden" id="send-btn">Send</button>
+    
+    <div>
+        <button class="toggle-btn hidden" onclick="toggleView('messages')" id="toggle-msg">Show Messages</button>
+        <button class="toggle-btn hidden" onclick="toggleView('encrypted')" id="toggle-enc">Show Encrypted Data</button>
+    </div>
+
+    <div id="messages-view" class="message-box hidden">
+        <h3>Messages:</h3>
+        <div id="messages"></div>
+    </div>
+
+    <div id="encrypted-view" class="message-box hidden">
+        <h3>Encrypted Data:</h3>
+        <div id="encrypted-messages"></div>
+    </div>
+</body>
+</html>

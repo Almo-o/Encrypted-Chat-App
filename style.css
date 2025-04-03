@@ -1,0 +1,56 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hidden {
+    display: none;
+}
+
+.message-box {
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    padding: 10px;
+    height: 300px;
+    overflow-y: auto;
+}
+
+.message {
+    margin: 5px 0;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+.sent {
+    background: #d1e7dd;
+    text-align: right;
+}
+
+.received {
+    background: #f0f0f0;
+    text-align: left;
+}
+
+.encrypted-msg {
+    color: #666;
+    font-family: monospace;
+    word-break: break-all;
+}
+
+.toggle-btn {
+    margin: 10px 0;
+    padding: 8px 12px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.user-selector {
+    margin: 20px 0;
+    padding: 10px;
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+}
