@@ -15,7 +15,7 @@ function setUser() {
         document.getElementById('public-key').value = storedPublicKey;
         document.getElementById('key-display').classList.remove('hidden');
     }
-    refreshMessages(); //function added for future
+    refreshMessages(); 
 }
 async function generateKeys() {
     if (!CURRENT_USER) return alert('Please login first');
@@ -132,3 +132,66 @@ async function sendMessage() {
         alert('Encryption failed. Check the recipient key.');
     }
 }
+function toggleView(view) {
+    document.getElementById('messages-view').classList.toggle('hidden', view !== 'messages');
+    document.getElementById('encrypted-view').classList.toggle('hidden', view !== 'encrypted');
+    refreshMessages();
+}
+
+async function refreshMessages() {
+    if (!CURRENT_USER) return;
+    
+    const messages = JSON.parse(localStorage.getItem(`${STORAGE_PREFIX}${CURRENT_USER}_messages`) || '[]');
+    const messagesDiv = document.getElementById('messages');
+    const encryptedDiv = document.getElementById('encrypted-messages');
+    
+    messagesDiv.innerHTML = '';
+    encryptedDiv.innerHTML = '';
+
+    try {
+        const privateKey = await crypto.subtle.importKey(
+            'pkcs8',
+            base64ToArray(localStorage.getItem(`${STORAGE_PREFIX}${CURRENT_USER}_private_key`)),
+            { name: 'RSA-OAEP', hash: 'SHA-256' },
+            false,
+            ['decrypt']
+        );
+
+        for (const msg of messages) {
+            // Decrypt for messages view
+            try {
+                const decrypted = await crypto.subtle.decrypt(
+                    { name: 'RSA-OAEP' },
+                    privateKey,
+                    base64ToArray(msg.data)
+                );
+                messagesDiv.innerHTML += `
+                    <div class="message ${msg.type}">
+                        ${msg.type === 'sent' ? '→' : '←'}
+                        ${new TextDecoder().decode(decrypted)}
+                    </div>
+                `;
+            } catch (e) {
+                messagesDiv.innerHTML += `
+                    <div class="message encrypted ${msg.type}">
+                        ${msg.type === 'sent' ? '→' : '←'}
+                        Failed to decrypt
+                    </div>
+                `;
+            }
+            encryptedDiv.innerHTML += `
+                <div class="encrypted-msg">
+                    ${msg.type === 'sent' ? '→' : '←'} 
+                    ${msg.data}
+                </div>
+            `;
+        }
+    } catch (e) {
+        messagesDiv.innerHTML = '<div class="message encrypted">Private key not found</div>';
+    }
+}
+window.addEventListener('storage', async (event) => {
+    if (event.key === `${STORAGE_PREFIX}${CURRENT_USER}_messages`) {
+        refreshMessages();
+    }
+});
