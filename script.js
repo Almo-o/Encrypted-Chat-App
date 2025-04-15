@@ -167,21 +167,21 @@ async function refreshMessages() {
                 );
                 messagesDiv.innerHTML += `
                     <div class="message ${msg.type}">
-                        ${msg.type === 'sent' ? '→' : '←'}
+                        ${msg.type === 'sent' ? 'Sent: ' : 'Recieved: '}
                         ${new TextDecoder().decode(decrypted)}
                     </div>
                 `;
             } catch (e) {
                 messagesDiv.innerHTML += `
                     <div class="message encrypted ${msg.type}">
-                        ${msg.type === 'sent' ? '→' : '←'}
+                    ${msg.type === 'sent' ? 'Sent: ' : 'Recieved: '}
                         Failed to decrypt
                     </div>
                 `;
             }
             encryptedDiv.innerHTML += `
                 <div class="encrypted-msg">
-                    ${msg.type === 'sent' ? '→' : '←'} 
+                    ${msg.type === 'sent' ? 'Sent: ' : 'Recieved: '} 
                     ${msg.data}
                 </div>
             `;
